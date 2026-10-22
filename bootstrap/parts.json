@@ -1,0 +1,23 @@
+{
+  "parts": [
+    "index.000.part",
+    "index.001.part",
+    "index.002.part",
+    "index.003.part",
+    "index.004.part",
+    "index.005.part",
+    "index.006.part",
+    "index.007.part",
+    "index.008.part",
+    "index.009.part",
+    "index.010.part",
+    "index.011.part",
+    "index.012.part",
+    "index.013.part",
+    "index.014.part",
+    "index.015.part",
+    "index.016.part"
+  ],
+  "bytes": 96372307,
+  "sha256": "34830e0745da50ab17bd31fe070c64d671059f1e202016e48ce6b4edb8de3a63"
+}
