@@ -2,7 +2,7 @@
 
 Lectura y escritura en castellano para alumnos que utilizan comunicación aumentativa y alternativa (CAA).
 
-Versión **0.6.4**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
+Versión **0.6.5**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
 
 ## Uso e instalación
 
@@ -28,3 +28,11 @@ GitHub Pages publica la rama `main`, carpeta raíz `/`. No requiere compilación
 Comprobados en Chromium: arranque online, manifiesto e iconos válidos, ausencia de errores de instalabilidad, registro y control del service worker, precarga íntegra, recarga offline, reproducción real offline de la locución «Muy bien, no riman.», conservación de datos y de una caché de otra aplicación, y créditos aprobados. Sin errores de consola ni de JavaScript. Los 2.972 recursos incrustados (2.968 únicos) mantienen exactamente sus datos originales; la lógica de ejercicios de 0.6.3 no se ha modificado.
 
 Estas pruebas de publicación no sustituyen la valoración con dispositivos físicos de acceso ni implican que se haya vuelto a auditar cada actividad o escuchado cada audio. La instalación en iOS debe comprobarse en un dispositivo físico.
+
+## Revisión de ordenadores y tabletas 0.6.5
+
+Se corrigen dos desbordamientos en tabletas: cuatro respuestas con imágenes grandes a 1024 × 768 y el teclado de escritura con palabras largas. El ajuste CSS se limita a anchuras de 701 a 1100 píxeles y alturas de hasta 1100 píxeles. Las hojas de estilo originales, la lógica de los ejercicios y los recursos incorporados se conservan.
+
+Comprobados 495 escenarios de disposición en Chromium 153, Firefox 153 y WebKit 26.5 sobre Linux (11 tamaños × 3 tamaños de imagen × 5 actividades por motor), con palabras largas en escritura y lectura. Las 900 imágenes se descodifican en los tres motores. Se comprueban también los seis accesos con eventos de ratón y teclado en Chromium y Firefox, y las siete vistas de configuración en escritorio y tableta. La PWA actualiza desde 0.6.4 tras cerrar las ventanas, conserva los datos y la caché de otras aplicaciones y vuelve a abrir offline.
+
+Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadOS, Android y Linux. La emulación no equivale a un dispositivo real. La salida de audio, la instalación y los dispositivos de acceso físicos requieren comprobación en cada plataforma, especialmente Safari en iPadOS y macOS. No se declara validada una plataforma por cambiar el tamaño de ventana o el agente de usuario.
