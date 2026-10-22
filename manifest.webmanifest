@@ -1,0 +1,33 @@
+{
+  "id": "/lecaa_cast/",
+  "name": "LECAA CAST",
+  "short_name": "LECAA CAST",
+  "description": "Lectura y escritura en castellano para alumnos que usan CAA.",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "/lecaa_cast/",
+  "scope": "/lecaa_cast/",
+  "display": "standalone",
+  "background_color": "#fffdf7",
+  "theme_color": "#17676b",
+  "icons": [
+    {
+      "src": "/lecaa_cast/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/lecaa_cast/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/lecaa_cast/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
