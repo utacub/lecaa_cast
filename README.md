@@ -14,7 +14,7 @@ Los perfiles, configuraciones y sesiones se guardan en este navegador y disposit
 
 ## Publicación y mantenimiento
 
-Publica la rama `main`, carpeta raíz `/`, en GitHub Pages. No requiere compilación ni servicios externos. `index.html` es autónomo; `manifest.webmanifest`, `sw.js` e `icons/` añaden la instalación PWA.
+GitHub Pages publica la rama `main`, carpeta raíz `/`. No requiere compilación ni servicios externos. `index.html` es autónomo; `manifest.webmanifest`, `sw.js` e `icons/` añaden la instalación PWA.
 
 - Identidad, inicio y ámbito: `/lecaa_cast/`.
 - Cachés exclusivos con prefijo `lecaa-cast-`.
