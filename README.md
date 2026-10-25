@@ -42,4 +42,7 @@ Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadO
 - La lista de correspondencias del Plan mostraba «gu davant e i» (catalán); ahora dice «gu ante e i».
 - En los gráficos de progreso, cada punto mostraba «LECAA CAST · 0.6.5» al pasar el puntero; ahora muestra la sesión y el porcentaje (por ejemplo, «S3: 75%»). El título accesible del gráfico es «Aciertos independientes con la correspondencia nueva, por sesión».
 
+- Se retira código heredado de LECAA en catalán que LECAA CAST nunca ejecutaba: las versiones catalanas de las actividades, de la vista de sonidos y del perfil de ejemplo, las palabras clave y rimas catalanas y el acceso «cast:tap-context». Los nombres de los niveles del corpus pasan al castellano.
+- Se actualiza la metadato `lecaa-revision` y se retira el flujo `assemble.yml`, que reconstruía el HTML desde una carpeta `bootstrap/` que ya no existe.
+
 La lógica de los ejercicios, los audios y las imágenes no cambian. Comprobado en Chromium sin errores de JavaScript.
