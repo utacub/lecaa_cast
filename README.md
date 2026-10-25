@@ -23,6 +23,16 @@ GitHub Pages publica la rama `main`, carpeta raíz `/`. No requiere compilación
 - Al modificar un script incrustado, recalcula su hash SHA-256 en la política CSP de `index.html`.
 - Conserva los créditos y avisos de terceros incluidos en el programa.
 
+### Reconstrucción del HTML a partir de fragmentos
+
+`index.html` pesa unos 97 MB, por encima de lo que admiten algunas vías de subida. Para publicarlo por partes:
+
+1. Divide el HTML en fragmentos y súbelos a una carpeta `bootstrap/` junto con `bootstrap/parts.json`, de la forma `{"parts": ["part-01", "part-02", …], "bytes": <tamaño total>, "sha256": "<hash del HTML completo>"}`.
+2. Al hacer push a `main` con cambios en `bootstrap/**`, o al lanzarlo a mano desde Actions, el flujo `.github/workflows/assemble.yml` une los fragmentos en orden, comprueba el tamaño y el SHA-256, escribe `index.html`, borra `bootstrap/` y hace commit en `main`.
+3. Si el tamaño o el hash no coinciden, el flujo falla y no cambia nada.
+
+Por eso `bootstrap/` no aparece en el repositorio: el propio flujo la elimina tras la reconstrucción.
+
 ## Validación de esta publicación
 
 Comprobados en Chromium: arranque online, manifiesto e iconos válidos, ausencia de errores de instalabilidad, registro y control del service worker, precarga íntegra, recarga offline, reproducción real offline de la locución «Muy bien, no riman.», conservación de datos y de una caché de otra aplicación, y créditos aprobados. Sin errores de consola ni de JavaScript. Los 2.972 recursos incrustados (2.968 únicos) mantienen exactamente sus datos originales; la lógica de ejercicios de 0.6.3 no se ha modificado.
@@ -43,6 +53,6 @@ Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadO
 - En los gráficos de progreso, cada punto mostraba «LECAA CAST · 0.6.5» al pasar el puntero; ahora muestra la sesión y el porcentaje (por ejemplo, «S3: 75%»). El título accesible del gráfico es «Aciertos independientes con la correspondencia nueva, por sesión».
 
 - Se retira código heredado de LECAA en catalán que LECAA CAST nunca ejecutaba: las versiones catalanas de las actividades, de la vista de sonidos y del perfil de ejemplo, las palabras clave y rimas catalanas y el acceso «cast:tap-context». Los nombres de los niveles del corpus pasan al castellano.
-- Se actualiza el metadato `lecaa-revision` y se retira el flujo `assemble.yml`, que reconstruía el HTML desde una carpeta `bootstrap/` que ya no existe.
+- Se actualiza el metadato `lecaa-revision`. El flujo `assemble.yml` se conserva; su mensaje de commit ya no lleva un número de versión fijo.
 
 La lógica de los ejercicios, los audios y las imágenes no cambian. Comprobado en Chromium sin errores de JavaScript.
