@@ -2,7 +2,7 @@
 
 Lectura y escritura en castellano para alumnos que utilizan comunicación aumentativa y alternativa (CAA).
 
-Versión **0.6.5**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
+Versión **0.6.6**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
 
 ## Uso e instalación
 
@@ -36,3 +36,10 @@ Se corrigen dos desbordamientos en tabletas: cuatro respuestas con imágenes gra
 Comprobados 495 escenarios de disposición en Chromium 153, Firefox 153 y WebKit 26.5 sobre Linux (11 tamaños × 3 tamaños de imagen × 5 actividades por motor), con palabras largas en escritura y lectura. Las 900 imágenes se descodifican en los tres motores. Se comprueban también los seis accesos con eventos de ratón y teclado en Chromium y Firefox, y las siete vistas de configuración en escritorio y tableta. La PWA actualiza desde 0.6.4 tras cerrar las ventanas, conserva los datos y la caché de otras aplicaciones y vuelve a abrir offline.
 
 Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadOS, Android y Linux. La emulación no equivale a un dispositivo real. La salida de audio, la instalación y los dispositivos de acceso físicos requieren comprobación en cada plataforma, especialmente Safari en iPadOS y macOS. No se declara validada una plataforma por cambiar el tamaño de ventana o el agente de usuario.
+
+## Correcciones 0.6.6
+
+- La lista de correspondencias del Plan mostraba «gu davant e i» (catalán); ahora dice «gu ante e i».
+- En los gráficos de progreso, cada punto mostraba «LECAA CAST · 0.6.5» al pasar el puntero; ahora muestra la sesión y el porcentaje (por ejemplo, «S3: 75%»). El título accesible del gráfico es «Aciertos independientes con la correspondencia nueva, por sesión».
+
+La lógica de los ejercicios, los audios y las imágenes no cambian. Comprobado en Chromium sin errores de JavaScript.
