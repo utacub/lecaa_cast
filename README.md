@@ -2,11 +2,11 @@
 
 Lectura y escritura en castellano para alumnos que utilizan comunicación aumentativa y alternativa (CAA).
 
-Versión **0.6.7**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
+Versión **0.6.8**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
 
 ## Uso e instalación
 
-Abre https://utacub.github.io/lecaa_cast/ en un navegador actualizado. En Chrome o Edge, utiliza la opción de instalación del navegador o «Instalar LECAA CAST» cuando aparezca. En iPhone o iPad, abre la página en Safari y elige Compartir → Añadir a la pantalla de inicio.
+Abre https://utacub.github.io/lecaa_cast/ en un navegador actualizado. En la pantalla de inicio, el botón «Instalar» (junto a «Qué es LECAA CAST», «Guía y marco teórico» y «Créditos») abre la instalación en Chrome y Edge. En iPhone o iPad, el mismo botón explica los pasos en Safari: Compartir → Añadir a pantalla de inicio. El botón no aparece cuando LECAA CAST ya se ha abierto como aplicación instalada.
 
 La primera descarga incluye el programa completo, unos 97 MB. Espera al mensaje **«Lista para usar sin conexión: imágenes y audios incluidos»** antes de desconectarte. Las siguientes aperturas pueden funcionar sin conexión. Los navegadores pueden eliminar los datos locales si se borra su almacenamiento o falta espacio; conserva copias de seguridad de los perfiles.
 
@@ -46,6 +46,14 @@ Se corrigen dos desbordamientos en tabletas: cuatro respuestas con imágenes gra
 Comprobados 495 escenarios de disposición en Chromium 153, Firefox 153 y WebKit 26.5 sobre Linux (11 tamaños × 3 tamaños de imagen × 5 actividades por motor), con palabras largas en escritura y lectura. Las 900 imágenes se descodifican en los tres motores. Se comprueban también los seis accesos con eventos de ratón y teclado en Chromium y Firefox, y las siete vistas de configuración en escritorio y tableta. La PWA actualiza desde 0.6.4 tras cerrar las ventanas, conserva los datos y la caché de otras aplicaciones y vuelve a abrir offline.
 
 Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadOS, Android y Linux. La emulación no equivale a un dispositivo real. La salida de audio, la instalación y los dispositivos de acceso físicos requieren comprobación en cada plataforma, especialmente Safari en iPadOS y macOS. No se declara validada una plataforma por cambiar el tamaño de ventana o el agente de usuario.
+
+## Cambio 0.6.8
+
+- Nuevo botón «Instalar» en la pantalla de inicio, después de «Qué es LECAA CAST», «Guía y marco teórico» y «Créditos», con el mismo estilo. Donde el navegador ofrece la instalación directa (Chrome, Edge, Android), abre su diálogo. En iPad, iPhone y otros navegadores sin esa opción abre una ventana con los pasos manuales. Se oculta si LECAA CAST ya funciona como aplicación instalada o al terminar la instalación.
+- Se retira el botón «Instalar LECAA CAST» del panel inferior de uso sin conexión, que solo aparecía en Chrome y Edge; el panel conserva el estado de descarga y la ayuda.
+- Solo cambia el script PWA y su CSS; se recalculan los hashes CSP y la versión de caché de `sw.js`.
+
+Comprobado en Chromium (escritorio, Pixel 7 e iPad emulado, también con el agente de usuario de Mac que usa iPadOS): botón visible y con el mismo estilo, diálogo de instalación simulado, ventana de pasos en iPad y en navegadores sin instalación directa, botón oculto en modo aplicación de iOS y tras instalar. Sin errores de JavaScript ni de CSP. Falta comprobarlo en un iPad real con Safari.
 
 ## Cambio 0.6.7
 
