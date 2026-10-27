@@ -53,6 +53,9 @@ Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadO
 - El registro no cambia: la actividad en la que falla una locución sigue guardándose en el perfil como no válida (`audio_pending`), con la locución afectada en sus eventos `audio_clip`.
 
 Comprobado en Chromium con locuciones desaprobadas a propósito en un perfil: no aparece ningún aviso, las actividades afectadas quedan registradas como `audio_pending` y las demás como válidas. Sin errores de JavaScript.
+- iPad y iPhone: las locuciones se reproducen con un único elemento de audio reutilizado, que se desbloquea con el primer toque mediante un silencio breve. Antes se creaba un elemento nuevo para cada locución; con la política de iOS, que solo permite reproducir sonido a partir de un toque, las consignas que suenan solas (la presentación de cada actividad, la retroacción, las ayudas automáticas) podían quedar mudas y la actividad se registraba como `audio_pending`.
+
+Pruebas en tabletas emuladas con Chromium (sin dispositivos físicos; WebKit no estaba disponible en el entorno de pruebas): Galaxy Tab S4 con la política de reproducción de Android, sin fallos. iPad (7.ª generación) e iPad Pro 11 con una emulación de la restricción de iOS: antes del cambio, 13 de 14 actividades sin audio; después, 0 de 32. El saludo inicial, que suena antes de cualquier toque, sigue sin poder sonar en iOS. Hay que confirmarlo en un iPad real con Safari.
 
 ## Correcciones 0.6.6
 

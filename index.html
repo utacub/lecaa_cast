@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-oRrAVppok0zE+kHbAUmC/NzM7+qRHEAteLsqLcj7FM8=' 'sha256-Trqr5EFqccqg2gmeatHswL/PCwP0ptELkxcHdlKYhMg='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-rHmjmYAjFNTduydKy17lClW/pFDkK0hMrXqNrGHzYeA=' 'sha256-Trqr5EFqccqg2gmeatHswL/PCwP0ptELkxcHdlKYhMg='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
 <meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="lecaa-revision" content="2026-10-27-cast-0.6.7">
 <title>LECAA CAST · 0.6.7</title>
@@ -1953,18 +1953,24 @@ const RecordedBank={
  play(clip,opt={}){
   return new Promise(resolve=>{
    if(Voice.audio){Voice.audio.pause();Voice.audio._finish?.(false);}
-   const a=new Audio(clip.src);Voice.audio=a;let done=false,timer,watchdog;
-   const finish=ok=>{if(done)return;done=true;clearTimeout(timer);clearTimeout(watchdog);a.pause();a.removeAttribute('src');a.load();if(Voice.audio===a)Voice.audio=null;Tone.duck(false);resolve(ok);};
+   // One reused element: iOS lets it play later clips without a new tap once a tap has unlocked it.
+   const a=this.player(),seq=a._seq=(a._seq||0)+1;a.src=clip.src;Voice.audio=a;let done=false,timer,watchdog;
+   const finish=ok=>{if(done)return;done=true;clearTimeout(timer);clearTimeout(watchdog);a.pause();if(a._seq===seq){a.removeAttribute('src');a.load();}if(Voice.audio===a)Voice.audio=null;Tone.duck(false);resolve(ok);};
    const check=()=>{if(done)return;if(a.currentTime>=clip.end)return finish(true);timer=setTimeout(check,20);};
    a._finish=finish;a.volume=Math.min(1,Math.max(0,(opt.volume??1)*Voice.volume));a.playbackRate=(opt.rate||1)*(Voice.rate||.9)/.9;
-   a.onloadedmetadata=()=>{if(done)return;a.currentTime=clip.start;Tone.duck(true);a.play().then(check).catch(()=>finish(false));};
+   a.onloadedmetadata=()=>{if(done)return;a.currentTime=clip.start;Tone.duck(true);a.play().then(()=>{a._unlocked=true;check();}).catch(()=>finish(false));};
    a.ontimeupdate=()=>{if(a.currentTime>=clip.end)finish(true);};
    a.onended=()=>finish(true);a.onerror=()=>finish(false);
    watchdog=setTimeout(()=>finish(false),Math.min(600000,Math.max(30000,(clip.end-clip.start)*3000)));a.load();
   });
- }
+ },
+ player(){if(!this._player){this._player=new Audio();this._player.preload='auto';}return this._player;},
+ // Plays a short silence on the first tap so that iOS and iPadOS allow the shared element to play later prompts.
+ unlock(){const a=this.player();if(a._unlocked||Voice.audio===a)return;const seq=a._seq=(a._seq||0)+1;a.src=SILENT_UNLOCK;a.play().then(()=>{a._unlocked=true;if(a._seq===seq&&Voice.audio!==a){a.pause();a.removeAttribute('src');a.load();}}).catch(()=>{});}
 
 };
+const SILENT_UNLOCK='data:audio/wav;base64,UklGRkQDAABXQVZFZm10IBAAAAABAAEAQB8AAIA+AAACABAAZGF0YSADAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==';
+for(const type of ['touchend','pointerup','click','keydown'])document.addEventListener(type,()=>RecordedBank.unlock(),{capture:true,passive:true});
 Voice.bankTurn=0;
 const ISOLATED_SOUND_BLOCKS={"a": "15", "e": "16", "è": "17", "i": "18", "o": "19", "ò": "20", "u": "21", "ə": "22", "s": "23", "ss": "23", "z": "24", "l": "25", "m": "26", "r": "27", "rr": "27", "ɾ": "28", "p": "29", "t": "30", "n": "31", "c": "32", "k": "32", "qu": "32", "g": "33", "gu": "33", "d": "34", "f": "35", "b": "36", "v": "36", "c·": "23", "g·": "37", "j": "37", "ll": "38", "ny": "39", "x": "40", "ix": "40", "tx": "41", "ig": "41", "tg": "42", "i-semivocal": "43", "u-semivocal": "44", "l·l": "45", "v-labiodental": "47"};
 const ISOLATED_PHONEME_BLOCKS={"a": "isolated-15", "e": "isolated-16", "ɛ": "isolated-17", "i": "isolated-18", "o": "isolated-19", "ɔ": "isolated-20", "u": "isolated-21", "ə": "isolated-22", "s": "isolated-23", "z": "isolated-24", "l": "isolated-25", "m": "isolated-26", "r": "isolated-27", "ɾ": "isolated-28", "p": "isolated-29", "t": "isolated-30", "n": "isolated-31", "k": "isolated-32", "ɡ": "isolated-33", "d": "isolated-34", "f": "isolated-35", "b": "isolated-36", "ʒ": "isolated-37", "ʎ": "isolated-38", "ɲ": "isolated-39", "ʃ": "isolated-40", "t͡ʃ": "isolated-41", "d͡ʒ": "isolated-42", "j": "isolated-43", "w": "isolated-44", "lː": "isolated-45", "v": "isolated-47"};
