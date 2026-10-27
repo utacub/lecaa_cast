@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-/cxPMlqRSlYxv+crMjBkpNfwH3IFo7ecJqwpzaMMSAw=' 'sha256-Trqr5EFqccqg2gmeatHswL/PCwP0ptELkxcHdlKYhMg='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-oRrAVppok0zE+kHbAUmC/NzM7+qRHEAteLsqLcj7FM8=' 'sha256-Trqr5EFqccqg2gmeatHswL/PCwP0ptELkxcHdlKYhMg='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
 <meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="lecaa-revision" content="2026-10-25-cast-0.6.6">
-<title>LECAA CAST · 0.6.6</title>
+<meta name="lecaa-revision" content="2026-10-27-cast-0.6.7">
+<title>LECAA CAST · 0.6.7</title>
 <meta name="description" content="Aplicación para practicar lectura y escritura en castellano, pensada para alumnos que utilizan CAA">
 
 
@@ -2528,7 +2528,7 @@ function showLECAAGuide(){
 
 
 /* LECAA CAST 0.1 — closed Spanish content and separate learner records. */
-const CAST_VERSION='0.6.6',CAST_ROWS=Object.values(CAST_DATA.corpus);
+const CAST_VERSION='0.6.7',CAST_ROWS=Object.values(CAST_DATA.corpus);
 const CAST_G=n=>'K'+String(n).padStart(2,'0');
 const CAST_PHONE=g=>CAST_DATA.phones[LETTER_ORDER.indexOf(g)];
 const CAST_EXCLUDED=p=>new Set([...(p.plan.excluded||[]),guideWord(p)].filter(Boolean));
@@ -2672,7 +2672,8 @@ for(const e of CAST_AUDIO.entries)if(e.delivery==='natural')if(!CastAudio.index.
 for(const [text,id]of Object.entries({'Empezamos':'ui.start','¡Hola! Empezamos a leer y escribir.':'ui.welcome','Pide ayuda':'ui.help','Terminar':'ui.end','Escucha la palabra':'ui.listen','Opciones de respuesta':'ui.options'}))CastAudio.index.set(RecordedBank.norm(text),id);
 RecordedBank.voice=function(){const v=CastAudio.voices();return v.length===2?v[Voice.bankTurn++%2]:v[0];};
 Voice.failureCount=0;Voice.init=()=>{};Voice.getCatalanVoices=()=>[];Voice.hasSynth=()=>false;
-Voice.reportMissing=function(key){this.failureCount++;this.missingSpeech.add(String(key));let note=document.getElementById('speech-unavailable');if(!note){note=h('p',{id:'speech-unavailable',class:'note',role:'status',style:'position:fixed;bottom:8px;left:16px;right:16px;z-index:100;font-size:14px;pointer-events:none'});document.body.append(note);}note.textContent='Vista de revisión · locuciones pendientes. Esta actividad no genera resultados de aprendizaje válidos.';};
+// Unplayable clips are recorded in the learner's log (audio_pending); no notice is shown on screen.
+Voice.reportMissing=function(key){this.failureCount++;this.missingSpeech.add(String(key));};
 Voice.hasRec=key=>{const id=CastAudio.resolve(key);return !!id&&CastAudio.voices().every(v=>!!CastAudio.clip(id,v));};
 Voice.playRec=async function(key,opt={}){
  const id=CastAudio.resolve(key),voice=opt.bankVoice||RecordedBank.voice(),clip=id&&CastAudio.clip(id,voice),token=this.token;S?.recordAudio?.({id:id||null,key,voice,status:clip?'available':'pending',version:clip?.version||RecordedBank.profile()?.pres?.castAudioReview?.[voice+':'+id]?.version||CastAudio.entries.get(id)?.voices[voice]?.version||null,start:clip?.start??null,end:Number.isFinite(clip?.end)?clip.end:null});
@@ -2853,7 +2854,7 @@ runChoice=it=>castTrial(it,false);runBuild=it=>castTrial(it,true);
 /* Spanish adult controls, per-word support and pending female/male recordings. */
 const castBaseIllustration=illustratedWord,castAdaptedImages=new Map();
 illustratedWord=function(word,p=S?.p||CUR){const item=ARASAAC_WORDS[word],presentation=item?.presentation;if(illustrationStyle(p)!=='arasaac'||!presentation?.required)return castBaseIllustration(word,p);if(!castAdaptedImages.has(word)){const c=presentation.crop||{x:0,y:0,width:500,height:500},masks=(presentation.masks||[]).map(m=>m.type==='polygon'?`<polygon points="${m.points}" fill="${m.fill||'#fff'}"/>`:`<rect x="${m.x}" y="${m.y}" width="${m.width}" height="${m.height}" fill="${m.fill||'#fff'}"/>`).join('');const svg=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="${c.x} ${c.y} ${c.width} ${c.height}" width="500" height="500"><image width="500" height="500" xlink:href="${ARASAAC_IMAGES[item.id]}"/>${masks}</svg>`;castAdaptedImages.set(word,'data:image/svg+xml;base64,'+btoa(svg));}return h('img',{src:castAdaptedImages.get(word),alt:word,draggable:'false','data-image-style':'arasaac','data-word':word,'data-arasaac-id':item.id,'data-adapted':'true'});};
-const castFooter=footer;footer=function(){const f=castFooter(),revision=f.querySelector('.app-revision');if(revision){revision.textContent='Sencillas · Detalladas · ARASAAC · LECAA CAST 0.6.6';revision.dataset.lecaaRevision='cast-0.6.6';}return f;};
+const castFooter=footer;footer=function(){const f=castFooter(),revision=f.querySelector('.app-revision');if(revision){revision.textContent='Sencillas · Detalladas · ARASAAC · LECAA CAST 0.6.7';revision.dataset.lecaaRevision='cast-0.6.7';}return f;};
 const castCredits=showCredits;showCredits=function(){castCredits();const body=[...document.querySelectorAll('.credits-modal .local-dialog-body,.credits-modal')].find(n=>n.classList.contains('local-dialog-body'))||document.querySelector('.credits-modal .local-dialog-body')||document.querySelector('.credits-modal');if(!body)return;const material=body.querySelectorAll('.credit-license').item(3)?.querySelector('p');if(material)material.textContent='Esta versión reutiliza la arquitectura, la marca, los logotipos y las animaciones de la versión en catalán de LECAA y adapta el contenido al castellano. Las locuciones son voces sintéticas generadas con ElevenLabs.';const variants=Object.entries(ARASAAC_WORDS).filter(([,x])=>x.semanticVariant),adaptations=Object.entries(ARASAAC_WORDS).filter(([,x])=>x.presentation?.required);body.append(h('section',{class:'credits-section stack'},h('h3',{},'Adaptación visual al castellano'),h('p',{},'Los pictogramas proceden del portal oficial ARASAAC. Los originales incorporados se conservan; los encuadres y las ocultaciones de texto se aplican al mostrarlos.'),h('p',{},'Adaptaciones de presentación: '+(adaptations.map(([w])=>w).join(', ')||'ninguna')+'.'),h('details',{},h('summary',{},'Variantes de escena de ARASAAC ('+variants.length+')'),h('p',{},'Estas representaciones conservan el sustantivo, pero difieren en detalles de la escena prevista. Comprueba que el alumno reconoce la denominación antes de utilizarlas.'),...variants.map(([w,x])=>h('p',{},h('b',{},w+': '),x.senseNote||x.variantNote||x.canonicalSense)))));};
 document.querySelector('.institutional-header .brand-lockup')?.append(h('span',{class:'cast-mark'},'CAST'));
 const castBrand=brand;brand=()=>{const b=castBrand();b.append(h('span',{class:'cast-mark'},'CAST'));return b;};
