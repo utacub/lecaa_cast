@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZZEM/mSPWhCSu5+Z52YYuqwLk+5QvbN6CktOujQtu4E=' 'sha256-Trqr5EFqccqg2gmeatHswL/PCwP0ptELkxcHdlKYhMg='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-Db5eBCgkuCIxa4CtwKPEpNmVZYFphduPFJ/Idpwt4Mw=' 'sha256-Akg2t/UHjUfQg9UMzuKGK0AGIDJnwBwUVm4qzngtbZs='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
 <meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="lecaa-revision" content="2026-10-27-cast-0.6.7">
-<title>LECAA CAST · 0.6.7</title>
+<meta name="lecaa-revision" content="2026-10-27-cast-0.6.8">
+<title>LECAA CAST · 0.6.8</title>
 <meta name="description" content="Aplicación para practicar lectura y escritura en castellano, pensada para alumnos que utilizan CAA">
 
 
@@ -651,7 +651,7 @@ button:disabled>*{opacity:1}
 <meta name="theme-color" content="#17676b">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="LECAA CAST">
-<style>.pwa-tools{margin:24px 0 0;padding-top:18px;border-top:1px solid var(--line);font-size:14px}.pwa-tools p{margin:8px 0}.pwa-tools summary{cursor:pointer}.pwa-tools button{margin:8px 12px 8px 0}.pwa-tools [hidden]{display:none!important}</style>
+<style>.pwa-tools{margin:24px 0 0;padding-top:18px;border-top:1px solid var(--line);font-size:14px}.pwa-tools p{margin:8px 0}.pwa-tools summary{cursor:pointer}.pwa-tools button{margin:8px 12px 8px 0}.pwa-tools [hidden],.home-info-actions [hidden]{display:none!important}.install-dialog .local-dialog-body{padding:20px 24px 26px}.install-dialog ol{margin:12px 0;padding-left:24px;line-height:1.6}.install-dialog li{margin:6px 0}</style>
 <style>
 /* 0.6.5: keep tablet answers and writing targets inside the available stage. */
 @media (min-width:701px) and (max-width:1100px) and (max-height:1100px) {
@@ -2534,7 +2534,7 @@ function showLECAAGuide(){
 
 
 /* LECAA CAST 0.1 — closed Spanish content and separate learner records. */
-const CAST_VERSION='0.6.7',CAST_ROWS=Object.values(CAST_DATA.corpus);
+const CAST_VERSION='0.6.8',CAST_ROWS=Object.values(CAST_DATA.corpus);
 const CAST_G=n=>'K'+String(n).padStart(2,'0');
 const CAST_PHONE=g=>CAST_DATA.phones[LETTER_ORDER.indexOf(g)];
 const CAST_EXCLUDED=p=>new Set([...(p.plan.excluded||[]),guideWord(p)].filter(Boolean));
@@ -2860,7 +2860,7 @@ runChoice=it=>castTrial(it,false);runBuild=it=>castTrial(it,true);
 /* Spanish adult controls, per-word support and pending female/male recordings. */
 const castBaseIllustration=illustratedWord,castAdaptedImages=new Map();
 illustratedWord=function(word,p=S?.p||CUR){const item=ARASAAC_WORDS[word],presentation=item?.presentation;if(illustrationStyle(p)!=='arasaac'||!presentation?.required)return castBaseIllustration(word,p);if(!castAdaptedImages.has(word)){const c=presentation.crop||{x:0,y:0,width:500,height:500},masks=(presentation.masks||[]).map(m=>m.type==='polygon'?`<polygon points="${m.points}" fill="${m.fill||'#fff'}"/>`:`<rect x="${m.x}" y="${m.y}" width="${m.width}" height="${m.height}" fill="${m.fill||'#fff'}"/>`).join('');const svg=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="${c.x} ${c.y} ${c.width} ${c.height}" width="500" height="500"><image width="500" height="500" xlink:href="${ARASAAC_IMAGES[item.id]}"/>${masks}</svg>`;castAdaptedImages.set(word,'data:image/svg+xml;base64,'+btoa(svg));}return h('img',{src:castAdaptedImages.get(word),alt:word,draggable:'false','data-image-style':'arasaac','data-word':word,'data-arasaac-id':item.id,'data-adapted':'true'});};
-const castFooter=footer;footer=function(){const f=castFooter(),revision=f.querySelector('.app-revision');if(revision){revision.textContent='Sencillas · Detalladas · ARASAAC · LECAA CAST 0.6.7';revision.dataset.lecaaRevision='cast-0.6.7';}return f;};
+const castFooter=footer;footer=function(){const f=castFooter(),revision=f.querySelector('.app-revision');if(revision){revision.textContent='Sencillas · Detalladas · ARASAAC · LECAA CAST 0.6.8';revision.dataset.lecaaRevision='cast-0.6.8';}return f;};
 const castCredits=showCredits;showCredits=function(){castCredits();const body=[...document.querySelectorAll('.credits-modal .local-dialog-body,.credits-modal')].find(n=>n.classList.contains('local-dialog-body'))||document.querySelector('.credits-modal .local-dialog-body')||document.querySelector('.credits-modal');if(!body)return;const material=body.querySelectorAll('.credit-license').item(3)?.querySelector('p');if(material)material.textContent='Esta versión reutiliza la arquitectura, la marca, los logotipos y las animaciones de la versión en catalán de LECAA y adapta el contenido al castellano. Las locuciones son voces sintéticas generadas con ElevenLabs.';const variants=Object.entries(ARASAAC_WORDS).filter(([,x])=>x.semanticVariant),adaptations=Object.entries(ARASAAC_WORDS).filter(([,x])=>x.presentation?.required);body.append(h('section',{class:'credits-section stack'},h('h3',{},'Adaptación visual al castellano'),h('p',{},'Los pictogramas proceden del portal oficial ARASAAC. Los originales incorporados se conservan; los encuadres y las ocultaciones de texto se aplican al mostrarlos.'),h('p',{},'Adaptaciones de presentación: '+(adaptations.map(([w])=>w).join(', ')||'ninguna')+'.'),h('details',{},h('summary',{},'Variantes de escena de ARASAAC ('+variants.length+')'),h('p',{},'Estas representaciones conservan el sustantivo, pero difieren en detalles de la escena prevista. Comprueba que el alumno reconoce la denominación antes de utilizarlas.'),...variants.map(([w,x])=>h('p',{},h('b',{},w+': '),x.senseNote||x.variantNote||x.canonicalSense)))));};
 document.querySelector('.institutional-header .brand-lockup')?.append(h('span',{class:'cast-mark'},'CAST'));
 const castBrand=brand;brand=()=>{const b=castBrand();b.append(h('span',{class:'cast-mark'},'CAST'));return b;};
@@ -2912,24 +2912,48 @@ CAST_AUDIO.counts.derivedVoiceSlots=CAST_AUDIO.derivedClips.length;
 /* PWA shell only. Exercise mechanics and embedded media are unchanged from 0.6.3. */
 (() => {
   if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
-  let prompt = null, status = 'Preparando el uso sin conexión… La primera descarga incluye todas las imágenes y los audios (unos 97 MB).', failed = false;
+  let prompt = null, installed = false, status = 'Preparando el uso sin conexión… La primera descarga incluye todas las imágenes y los audios (unos 97 MB).', failed = false;
   const render = () => {
     const host = document.querySelector('.launch-inner');
     if (!host) return;
     let panel = host.querySelector('.pwa-tools');
     if (!panel) {
       panel = document.createElement('section'); panel.className = 'pwa-tools'; panel.setAttribute('aria-label', 'Instalación y uso sin conexión');
-      const install = document.createElement('button'); install.type = 'button'; install.className = 'btn ghost small'; install.dataset.pwaInstall = ''; install.textContent = 'Instalar LECAA CAST';
-      install.onclick = async () => { const event = prompt; if (!event) return; prompt = null; render(); await event.prompt(); await event.userChoice; };
       const message = document.createElement('p'); message.dataset.pwaStatus = ''; message.setAttribute('role', 'status');
       const retry = document.createElement('button'); retry.type = 'button'; retry.className = 'btn ghost small'; retry.dataset.pwaRetry = ''; retry.textContent = 'Reintentar descarga'; retry.onclick = register;
       const details = document.createElement('details'); const summary = document.createElement('summary'); summary.textContent = 'Cómo instalar y usar sin conexión';
-      const help = document.createElement('p'); help.textContent = 'En Chrome o Edge, usa «Instalar LECAA CAST» o la opción de instalación del navegador. En iPhone o iPad, abre esta página en Safari y elige Compartir › Añadir a la pantalla de inicio (activa «Abrir como app web» si aparece). Espera al mensaje «Lista para usar sin conexión» antes de desconectarte. Los perfiles y las sesiones se guardan solo en este navegador y dispositivo; conserva tus copias de seguridad. Una instalación en otro navegador no transfiere los perfiles.';
-      details.append(summary, help); panel.append(install, message, retry, details); host.append(panel);
+      const help = document.createElement('p'); help.textContent = 'En Chrome o Edge, usa el botón «Instalar» de la pantalla de inicio o la opción de instalación del navegador. En iPhone o iPad, abre esta página en Safari y elige Compartir › Añadir a la pantalla de inicio (activa «Abrir como app web» si aparece). Espera al mensaje «Lista para usar sin conexión» antes de desconectarte. Los perfiles y las sesiones se guardan solo en este navegador y dispositivo; conserva tus copias de seguridad. Una instalación en otro navegador no transfiere los perfiles.';
+      details.append(summary, help); panel.append(message, retry, details); host.append(panel);
     }
-    panel.querySelector('[data-pwa-install]').hidden = !prompt || matchMedia('(display-mode: standalone)').matches;
+    const nav = host.querySelector('.home-info-actions');
+    if (nav && !nav.querySelector('[data-home-install]')) {
+      const install = document.createElement('button'); install.type = 'button'; install.className = 'btn ghost small'; install.dataset.homeInstall = ''; install.textContent = 'Instalar';
+      install.onclick = async () => {
+        const event = prompt;
+        if (!event) { showInstallHelp(); return; }
+        prompt = null; render(); await event.prompt(); await event.userChoice;
+      };
+      nav.append(install);
+    }
+    const homeInstall = nav?.querySelector('[data-home-install]');
+    if (homeInstall) { homeInstall.hidden = installed || standalone(); homeInstall.setAttribute('aria-haspopup', prompt ? 'false' : 'dialog'); }
     panel.querySelector('[data-pwa-status]').textContent = status;
     panel.querySelector('[data-pwa-retry]').hidden = !failed;
+  };
+  // Already opened as an installed app: no install button.
+  const standalone = () => matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches || navigator.standalone === true;
+  // iPadOS 13+ reports itself as a Mac; touch points tell them apart.
+  const apple = () => /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  // Safari has no install prompt API: explain the manual steps instead.
+  const showInstallHelp = () => {
+    const {body} = localDialog('Instalar LECAA CAST', 'install-dialog');
+    const p = text => { const el = document.createElement('p'); el.textContent = text; return el; };
+    const steps = document.createElement('ol');
+    const lines = apple()
+      ? ['Abre esta página en Safari.', 'Toca el botón Compartir (el cuadrado con una flecha hacia arriba).', 'Elige «Añadir a pantalla de inicio». Si aparece «Abrir como app web», déjalo activado.', 'Toca «Añadir». LECAA CAST aparecerá en la pantalla de inicio.']
+      : ['Abre el menú del navegador.', 'Elige «Instalar LECAA CAST», «Instalar aplicación» o «Añadir a la pantalla de inicio».', 'Si no aparece ninguna de estas opciones, puede que LECAA CAST ya esté instalada en este dispositivo o que el navegador no permita instalar aplicaciones web; prueba con Chrome o Edge.'];
+    for (const line of lines) { const li = document.createElement('li'); li.textContent = line; steps.append(li); }
+    body.append(p(apple() ? 'En iPad y iPhone, la instalación se hace desde Safari:' : 'Este navegador no ofrece la instalación directa desde el botón:'), steps, p('Espera al mensaje «Lista para usar sin conexión» antes de desconectarte. Los perfiles se guardan en este navegador y dispositivo: una instalación en otro navegador no los transfiere.'));
   };
   const ready = async () => {
     const reg = await navigator.serviceWorker.ready;
@@ -2956,7 +2980,8 @@ CAST_AUDIO.counts.derivedVoiceSlots=CAST_AUDIO.derivedClips.length;
     } catch (e) { failed = true; status = 'No se ha podido preparar el uso sin conexión. Puedes seguir usando LECAA CAST online; comprueba la conexión y el espacio disponible.'; render(); }
   }
   window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); prompt = e; render(); });
-  window.addEventListener('appinstalled', () => { prompt = null; render(); });
+  window.addEventListener('appinstalled', () => { prompt = null; installed = true; render(); });
+  matchMedia('(display-mode: standalone)').addEventListener?.('change', render);
   navigator.serviceWorker.addEventListener('controllerchange', () => ready().catch(() => {}));
   // Home only: never add controls to the student stage or modify scanning targets.
   const original = showStart;
