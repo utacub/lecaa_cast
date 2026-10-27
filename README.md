@@ -56,6 +56,7 @@ Comprobado en Chromium con locuciones desaprobadas a propósito en un perfil: no
 - iPad y iPhone: las locuciones se reproducen con un único elemento de audio reutilizado, que se desbloquea con el primer toque mediante un silencio breve. Antes se creaba un elemento nuevo para cada locución; con la política de iOS, que solo permite reproducir sonido a partir de un toque, las consignas que suenan solas (la presentación de cada actividad, la retroacción, las ayudas automáticas) podían quedar mudas y la actividad se registraba como `audio_pending`.
 
 Pruebas en tabletas emuladas con Chromium (sin dispositivos físicos; WebKit no estaba disponible en el entorno de pruebas): Galaxy Tab S4 con la política de reproducción de Android, sin fallos. iPad (7.ª generación) e iPad Pro 11 con una emulación de la restricción de iOS: antes del cambio, 13 de 14 actividades sin audio; después, 0 de 32. El saludo inicial, que suena antes de cualquier toque, sigue sin poder sonar en iOS. Hay que confirmarlo en un iPad real con Safari.
+- Velocidad de las locuciones: la velocidad nunca se aplicaba, porque `load()` devolvía el audio a 1× antes de sonar. Ahora se aplica tras cargar el audio, de modo que «Velocidad de la voz» y las ayudas lentas (70 % en «Escúchala», 60 % en el nivel 2 de escritura, 55 % en el modelo de lectura) suenan como estaban diseñadas. Se limita a entre 0,5× y 4×, el intervalo que admiten los navegadores sin silenciar el audio.
 
 ## Correcciones 0.6.6
 

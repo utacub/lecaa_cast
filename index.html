@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-rHmjmYAjFNTduydKy17lClW/pFDkK0hMrXqNrGHzYeA=' 'sha256-Trqr5EFqccqg2gmeatHswL/PCwP0ptELkxcHdlKYhMg='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-ZZEM/mSPWhCSu5+Z52YYuqwLk+5QvbN6CktOujQtu4E=' 'sha256-Trqr5EFqccqg2gmeatHswL/PCwP0ptELkxcHdlKYhMg='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
 <meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="lecaa-revision" content="2026-10-27-cast-0.6.7">
 <title>LECAA CAST · 0.6.7</title>
@@ -1957,8 +1957,8 @@ const RecordedBank={
    const a=this.player(),seq=a._seq=(a._seq||0)+1;a.src=clip.src;Voice.audio=a;let done=false,timer,watchdog;
    const finish=ok=>{if(done)return;done=true;clearTimeout(timer);clearTimeout(watchdog);a.pause();if(a._seq===seq){a.removeAttribute('src');a.load();}if(Voice.audio===a)Voice.audio=null;Tone.duck(false);resolve(ok);};
    const check=()=>{if(done)return;if(a.currentTime>=clip.end)return finish(true);timer=setTimeout(check,20);};
-   a._finish=finish;a.volume=Math.min(1,Math.max(0,(opt.volume??1)*Voice.volume));a.playbackRate=(opt.rate||1)*(Voice.rate||.9)/.9;
-   a.onloadedmetadata=()=>{if(done)return;a.currentTime=clip.start;Tone.duck(true);a.play().then(()=>{a._unlocked=true;check();}).catch(()=>finish(false));};
+   a._finish=finish;a.volume=Math.min(1,Math.max(0,(opt.volume??1)*Voice.volume));const rate=Math.min(4,Math.max(.5,(opt.rate||1)*(Voice.rate||.9)/.9));
+   a.onloadedmetadata=()=>{if(done)return;a.currentTime=clip.start;a.defaultPlaybackRate=a.playbackRate=rate;Tone.duck(true);a.play().then(()=>{a._unlocked=true;check();}).catch(()=>finish(false));};
    a.ontimeupdate=()=>{if(a.currentTime>=clip.end)finish(true);};
    a.onended=()=>finish(true);a.onerror=()=>finish(false);
    watchdog=setTimeout(()=>finish(false),Math.min(600000,Math.max(30000,(clip.end-clip.start)*3000)));a.load();
