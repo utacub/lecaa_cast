@@ -2,7 +2,7 @@
 
 Lectura y escritura en castellano para alumnos que utilizan comunicación aumentativa y alternativa (CAA).
 
-Versión **0.6.6**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
+Versión **0.6.7**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
 
 ## Uso e instalación
 
@@ -46,6 +46,17 @@ Se corrigen dos desbordamientos en tabletas: cuatro respuestas con imágenes gra
 Comprobados 495 escenarios de disposición en Chromium 153, Firefox 153 y WebKit 26.5 sobre Linux (11 tamaños × 3 tamaños de imagen × 5 actividades por motor), con palabras largas en escritura y lectura. Las 900 imágenes se descodifican en los tres motores. Se comprueban también los seis accesos con eventos de ratón y teclado en Chromium y Firefox, y las siete vistas de configuración en escritorio y tableta. La PWA actualiza desde 0.6.4 tras cerrar las ventanas, conserva los datos y la caché de otras aplicaciones y vuelve a abrir offline.
 
 Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadOS, Android y Linux. La emulación no equivale a un dispositivo real. La salida de audio, la instalación y los dispositivos de acceso físicos requieren comprobación en cada plataforma, especialmente Safari en iPadOS y macOS. No se declara validada una plataforma por cambiar el tamaño de ventana o el agente de usuario.
+
+## Cambio 0.6.7
+
+- Ya no aparece en pantalla el aviso «Vista de revisión · locuciones pendientes. Esta actividad no genera resultados de aprendizaje válidos.». Antes salía cuando una locución no se podía reproducir y no desaparecía hasta volver al inicio, de modo que seguía visible en las actividades siguientes.
+- El registro no cambia: la actividad en la que falla una locución sigue guardándose en el perfil como no válida (`audio_pending`), con la locución afectada en sus eventos `audio_clip`.
+
+Comprobado en Chromium con locuciones desaprobadas a propósito en un perfil: no aparece ningún aviso, las actividades afectadas quedan registradas como `audio_pending` y las demás como válidas. Sin errores de JavaScript.
+- iPad y iPhone: las locuciones se reproducen con un único elemento de audio reutilizado, que se desbloquea con el primer toque mediante un silencio breve. Antes se creaba un elemento nuevo para cada locución; con la política de iOS, que solo permite reproducir sonido a partir de un toque, las consignas que suenan solas (la presentación de cada actividad, la retroacción, las ayudas automáticas) podían quedar mudas y la actividad se registraba como `audio_pending`.
+
+Pruebas en tabletas emuladas con Chromium (sin dispositivos físicos; WebKit no estaba disponible en el entorno de pruebas): Galaxy Tab S4 con la política de reproducción de Android, sin fallos. iPad (7.ª generación) e iPad Pro 11 con una emulación de la restricción de iOS: antes del cambio, 13 de 14 actividades sin audio; después, 0 de 32. El saludo inicial, que suena antes de cualquier toque, sigue sin poder sonar en iOS. Hay que confirmarlo en un iPad real con Safari.
+- Velocidad de las locuciones: la velocidad nunca se aplicaba, porque `load()` devolvía el audio a 1× antes de sonar. Ahora se aplica tras cargar el audio, de modo que «Velocidad de la voz» y las ayudas lentas (70 % en «Escúchala», 60 % en el nivel 2 de escritura, 55 % en el modelo de lectura) suenan como estaban diseñadas. Se limita a entre 0,5× y 4×, el intervalo que admiten los navegadores sin silenciar el audio.
 
 ## Correcciones 0.6.6
 
