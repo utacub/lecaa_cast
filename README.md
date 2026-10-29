@@ -2,7 +2,7 @@
 
 Lectura y escritura en castellano para alumnos que utilizan comunicación aumentativa y alternativa (CAA).
 
-Versión **0.6.9**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
+Versión **0.6.10**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
 
 ## Uso e instalación
 
@@ -46,6 +46,13 @@ Se corrigen dos desbordamientos en tabletas: cuatro respuestas con imágenes gra
 Comprobados 495 escenarios de disposición en Chromium 153, Firefox 153 y WebKit 26.5 sobre Linux (11 tamaños × 3 tamaños de imagen × 5 actividades por motor), con palabras largas en escritura y lectura. Las 900 imágenes se descodifican en los tres motores. Se comprueban también los seis accesos con eventos de ratón y teclado en Chromium y Firefox, y las siete vistas de configuración en escritorio y tableta. La PWA actualiza desde 0.6.4 tras cerrar las ventanas, conserva los datos y la caché de otras aplicaciones y vuelve a abrir offline.
 
 Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadOS, Android y Linux. La emulación no equivale a un dispositivo real. La salida de audio, la instalación y los dispositivos de acceso físicos requieren comprobación en cada plataforma, especialmente Safari en iPadOS y macOS. No se declara validada una plataforma por cambiar el tamaño de ventana o el agente de usuario.
+
+## Cambio 0.6.10
+
+- Las dos opciones de teclado completo aparecen también en la configuración del alumno, pestaña «Plan», junto a «Opciones en Letra y sonido» y «Permitir «Lo que he escrito»»: «Teclado completo en «Letra y sonido»» y «Teclado completo en «Construye la palabra»». Así se pueden activar antes de empezar la sesión.
+- La casilla de la configuración y el botón de la actividad cambian la misma opción del perfil (`pres.fullKeyboard.T8` y `pres.fullKeyboard.T11`). El historial de cambios indica si el cambio se hizo desde la configuración (adulto) o desde la actividad.
+
+Comprobado en Chromium: activar desde la configuración, empezar la sesión con el teclado completo ya activo, desactivarlo desde la actividad y ver la casilla desmarcada al volver a la configuración. Sin errores de JavaScript ni de CSP.
 
 ## Cambio 0.6.9
 
