@@ -1,7 +1,7 @@
 'use strict';
 // Change this cache version for every deployment that changes any shell file.
 const PREFIX = 'lecaa-cast-';
-const CACHE = PREFIX + '0.6.8-81934e60';
+const CACHE = PREFIX + '0.6.9-97299341';
 const ROOT = '/lecaa_cast/';
 const SHELL = [ROOT, ROOT + 'manifest.webmanifest', ROOT + 'icons/icon-192.png', ROOT + 'icons/icon-512.png', ROOT + 'icons/maskable-512.png', ROOT + 'icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
