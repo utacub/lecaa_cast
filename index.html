@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-/5I4L5evhHJ3VFr2PYpB4HBDfvlFPE05sW/0O39ieso=' 'sha256-Akg2t/UHjUfQg9UMzuKGK0AGIDJnwBwUVm4qzngtbZs='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-FSOzERFyP9+8z+yqHtRWpu+QFQ0QQ4jVSsMv26Jnj4M=' 'sha256-Akg2t/UHjUfQg9UMzuKGK0AGIDJnwBwUVm4qzngtbZs='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
 <meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="lecaa-revision" content="2026-10-29-cast-0.6.9">
 <title>LECAA CAST · 0.6.9</title>
@@ -681,10 +681,14 @@ button:disabled>*{opacity:1}
 .fk-answer .slot{min-width:calc(var(--tile)*.9);padding:0 8px}
 .fk-layout .writing-main{align-self:center}
 @media(min-width:701px){.fk-layout .answers{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,var(--tile));justify-content:center;width:100%}.fk-layout .answers>.tile{width:100%;height:auto;aspect-ratio:1;min-width:0;max-width:none;max-height:none}}
-.fk-kbd{gap:10px}
-.fk-block{display:grid;gap:7px;padding:5px;border-radius:14px;background:color-mix(in srgb,var(--surface) 35%,transparent)}
-.kbd .fk-row{flex-wrap:nowrap;gap:7px}
-.writing-main .fk-kbd .key,.build-stage .writing-main .fk-kbd .key{height:clamp(40px,6.4vh,58px);min-width:clamp(38px,5vw,60px);font-size:clamp(1.3rem,3.5vh,1.9rem);padding:0 6px}
+.writing-main>.fk-area{width:100%;container-type:inline-size}
+.fk-kbd{--fk-key:clamp(28px,4.2vw,58px);--fk-gap:clamp(3px,.6vw,7px);display:flex;flex-direction:row;justify-content:center;align-items:flex-start;gap:clamp(8px,1.6vw,18px)}
+@supports (width:1cqw){.fk-kbd{--fk-key:min(58px,calc((100cqw - 110px)/11.5));--fk-gap:clamp(3px,1cqw,7px);gap:clamp(8px,2cqw,18px)}}
+.fk-block{display:grid;align-content:start;gap:var(--fk-gap);padding:5px;border-radius:14px;background:color-mix(in srgb,var(--surface) 35%,transparent)}
+.kbd .fk-row{flex-wrap:nowrap;justify-content:flex-start;gap:var(--fk-gap)}
+.kbd .fk-r1{padding-left:calc(var(--fk-key)*.3)}
+.kbd .fk-r2{padding-left:calc(var(--fk-key)*.75)}
+.writing-main .fk-kbd .key,.build-stage .writing-main .fk-kbd .key{flex:none;width:var(--fk-key);min-width:0;height:clamp(40px,6.4vh,58px);font-size:clamp(1.2rem,3.4vh,1.9rem);padding:0}
 .writing-main:has(.fk-kbd){gap:8px}
 .writing-main:has(.fk-kbd) .stim-pic,.build-stage .writing-main:has(.fk-kbd) .stim-pic{width:clamp(64px,11vh,108px);height:clamp(64px,11vh,108px)}
 @media(max-width:700px){.fk-field.fk-typing{padding:8px 10px 4px}
@@ -692,8 +696,9 @@ button:disabled>*{opacity:1}
  .fk-layout>.writing-actions,.writing-layout:has(.fk-kbd)>.writing-actions{flex-direction:row;flex-wrap:wrap;justify-content:center;position:static}
  .writing-layout.fk-layout>.writing-actions .key.fn,.writing-layout:has(.fk-kbd)>.writing-actions .key.fn{flex:1 1 0;width:auto;max-width:180px;min-height:50px;padding:6px 4px;font-size:.78rem}
  .writing-layout:has(.fk-kbd)>.writing-actions{flex-wrap:nowrap;gap:6px}
- .writing-main>.fk-area,.fk-kbd,.fk-block,.kbd .fk-row{width:100%}
- .writing-main .fk-kbd .key,.build-stage .writing-main .fk-kbd .key{flex:1 1 0;min-width:0;max-width:54px;height:clamp(34px,5.6vh,48px);padding:0}
+ .writing-main .fk-kbd .key,.build-stage .writing-main .fk-kbd .key{height:clamp(34px,5.6vh,48px);font-size:clamp(1rem,3vh,1.5rem)}
+ @supports (width:1cqw){.fk-kbd{--fk-key:min(48px,calc((100cqw - 48px)/10.9));gap:8px}}
+ .fk-block{padding:3px}.kbd .fk-r1{padding-left:calc(var(--fk-key)*.2)}.kbd .fk-r2{padding-left:calc(var(--fk-key)*.5)}
  .writing-main:has(.fk-kbd) .stim-pic,.build-stage .writing-main:has(.fk-kbd) .stim-pic{width:clamp(56px,9vh,90px);height:clamp(56px,9vh,90px)}
  .writing-actions .fk-toggle{flex-direction:column;gap:5px}
  .fk-switch{width:38px;height:22px}.fk-knob{width:16px;height:16px}.fk-toggle.on .fk-knob{left:19px}}
@@ -2770,7 +2775,8 @@ async function castLightUnits(units,elements,word=null,live=()=>true,keysFor=nul
 /* CAST 0.6.9: optional full keyboard in T8 and T11, remembered per learner and activity.
    Direct selection types with the device keyboard (physical or on screen); scanning and gaze use the app keyboard. */
 const FullKeyboard={
- rows:[['a','b','c','d','e','f','g'],['h','i','j','k','l','m','n'],['ñ','o','p','q','r','s','t'],['u','v','w','x','y','z']],
+ // QWERTY split into the left and right halves, three rows each.
+ blocks:[[['q','w','e','r','t'],['a','s','d','f','g'],['z','x','c','v','b']],[['y','u','i','o','p'],['h','j','k','l','ñ'],['n','m']]],
  names:{T8:'Letra y sonido',T11:'Construye la palabra'},
  on(p,tpl){return !!p.pres.fullKeyboard?.[tpl];},
  set(p,tpl,value){p.pres.fullKeyboard={...(p.pres.fullKeyboard||{}),[tpl]:!!value};logChange(p,'Teclado completo en «'+this.names[tpl]+'»: '+(value?'activado':'desactivado')+'.','alumne');Store.save();},
@@ -2901,10 +2907,9 @@ function castTrial(it,writing){return new Promise(resolve=>{
   }
   fkPaint();
  }
- // App keyboard for switch and gaze access: blocks, then rows, then keys.
+ // App keyboard for switch and gaze access: left or right half, then row, then key.
  function fkKeyboard(){
-  const blocks=[FullKeyboard.rows.slice(0,2),FullKeyboard.rows.slice(2)];
-  return h('div',{class:'kbd fk-kbd'},...blocks.map((rows,b)=>h('div',{class:'fk-block','data-groupbox':'fk'+b},...rows.map((row,r)=>h('div',{class:'krow fk-row','data-groupbox':'fk'+b+'/r'+r},...row.map(ch=>{const key=h('button',{class:'key','data-sel':'','data-group':'fk'+b+'/r'+r,'data-v':ch,'aria-label':'Letra '+ch},ch);key._act=()=>fkType(fullText+ch,'teclado-app');return key;}))))));
+  return h('div',{class:'kbd fk-kbd'},...FullKeyboard.blocks.map((rows,b)=>h('div',{class:'fk-block','data-groupbox':'fk'+b},...rows.map((row,r)=>h('div',{class:'krow fk-row fk-r'+r,'data-groupbox':'fk'+b+'/r'+r},...row.map(ch=>{const key=h('button',{class:'key','data-sel':'','data-group':'fk'+b+'/r'+r,'data-v':ch,'aria-label':'Letra '+ch},ch);key._act=()=>fkType(fullText+ch,'teclado-app');return key;}))))));
  }
  function fkDraw(){if(writing)drawSlots();else slots?.replaceChildren(h('span',{class:'slot'},typed.map(showG).join('')));}
  // While an on-screen keyboard is composing, the field is left untouched and only the slots follow it.
