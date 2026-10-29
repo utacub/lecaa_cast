@@ -51,8 +51,10 @@ Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadO
 
 - Las dos opciones de teclado completo aparecen también en la configuración del alumno, pestaña «Plan», junto a «Opciones en Letra y sonido» y «Permitir «Lo que he escrito»»: «Teclado completo en «Letra y sonido»» y «Teclado completo en «Construye la palabra»». Así se pueden activar antes de empezar la sesión.
 - La casilla de la configuración y el botón de la actividad cambian la misma opción del perfil (`pres.fullKeyboard.T8` y `pres.fullKeyboard.T11`). El historial de cambios indica si el cambio se hizo desde la configuración (adulto) o desde la actividad.
+- Cuando al menos una de las dos opciones está activada, aparece el selector «Teclado en pantalla» (`pres.screenKeyboard`): «Automático según el acceso» (por defecto: teclado del sistema con selección directa y teclado de LECAA con barrido o mirada), «Teclado de LECAA» o «Teclado del sistema operativo».
+- Con el teclado de LECAA también se puede escribir con un teclado físico, salvo con las teclas configuradas como pulsadores. Intro sobre una tecla del teclado de LECAA envía la respuesta.
 
-Comprobado en Chromium: activar desde la configuración, empezar la sesión con el teclado completo ya activo, desactivarlo desde la actividad y ver la casilla desmarcada al volver a la configuración. Sin errores de JavaScript ni de CSP.
+Comprobado en Chromium: activar desde la configuración, empezar la sesión con el teclado completo ya activo, desactivarlo desde la actividad y ver la casilla desmarcada al volver a la configuración; selector oculto con las dos opciones desactivadas; teclado de LECAA con selección directa, combinado con teclado físico; teclado del sistema con barrido; vuelta al modo automático. Sin errores de JavaScript ni de CSP.
 
 ## Cambio 0.6.9
 
