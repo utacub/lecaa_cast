@@ -2,7 +2,7 @@
 
 Lectura y escritura en castellano para alumnos que utilizan comunicación aumentativa y alternativa (CAA).
 
-Versión **0.6.8**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
+Versión **0.6.9**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
 
 ## Uso e instalación
 
@@ -46,6 +46,19 @@ Se corrigen dos desbordamientos en tabletas: cuatro respuestas con imágenes gra
 Comprobados 495 escenarios de disposición en Chromium 153, Firefox 153 y WebKit 26.5 sobre Linux (11 tamaños × 3 tamaños de imagen × 5 actividades por motor), con palabras largas en escritura y lectura. Las 900 imágenes se descodifican en los tres motores. Se comprueban también los seis accesos con eventos de ratón y teclado en Chromium y Firefox, y las siete vistas de configuración en escritorio y tableta. La PWA actualiza desde 0.6.4 tras cerrar las ventanas, conserva los datos y la caché de otras aplicaciones y vuelve a abrir offline.
 
 Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadOS, Android y Linux. La emulación no equivale a un dispositivo real. La salida de audio, la instalación y los dispositivos de acceso físicos requieren comprobación en cada plataforma, especialmente Safari en iPadOS y macOS. No se declara validada una plataforma por cambiar el tamaño de ventana o el agente de usuario.
+
+## Cambio 0.6.9
+
+- Nuevo botón «Activar teclado completo» en «Letra y sonido» (T8) y «Construye la palabra» (T11), en la columna de botones de la derecha. Al pulsarlo desaparecen las opciones o el teclado reducido y el alumno escribe la respuesta con un teclado completo. El botón queda pulsado, con un interruptor encendido, y pasa a decir «Desactivar teclado completo».
+- La opción se guarda en el perfil de cada alumno y por separado para cada actividad (`pres.fullKeyboard.T8` y `pres.fullKeyboard.T11`). Cada cambio queda en el historial de cambios del perfil.
+- Con selección directa se escribe con el teclado físico o con el teclado en pantalla del dispositivo: al activar la opción, o al tocar la casilla de respuesta, se abre el teclado del sistema. «Hecho» o la tecla Intro envían la respuesta.
+- Con barrido (automático, paso a paso, uno o dos pulsadores) y con lector ocular aparece un teclado propio de la aplicación: primero se recorren dos bloques de letras, después las filas del bloque y después las teclas de la fila. Las letras están en orden alfabético (a–g, h–n, ñ–t, u–z). El barrido admite ahora grupos anidados mediante rutas en `data-group` («fk0/r1»).
+- En «Letra y sonido» con teclado completo, una letra con el mismo sonido también cuenta como acierto (por ejemplo, b cuando se busca v); el registro lo marca con `homophone: true`. Cada registro de T8 y T11 indica la forma de respuesta en `input` (`opciones`, `teclado-reducido`, `teclado-completo-dispositivo`, `teclado-completo-app` o `…-por-ayuda`).
+- Las ayudas 3 y 4 vuelven a mostrar las opciones o el teclado reducido, como sin teclado completo. «Lo que he escrito» lee las letras que no forman parte del programa sin locución (h, q, w) o con su sonido habitual (k, x), de modo que no invalida la actividad.
+- La ayuda 2 de escritura, que resalta la primera letra, ahora se ve: la clase `hint` de las teclas no tenía estilo.
+- El botón no tiene locución para el barrido con señal auditiva, porque no hay grabación de «Activar teclado completo».
+
+Comprobado solo en Chromium (escritorio, iPad, iPhone y Pixel emulados), con selección directa, composición de un teclado en pantalla, barrido automático y de dos pulsadores, y lector ocular. Las demás actividades no cambian. En «Letra y sonido» las opciones dejan sitio a la nueva columna de botones; por debajo de 700 px de ancho el botón pasa debajo de las opciones. Falta comprobarlo en dispositivos reales, especialmente Safari en iPad (apertura del teclado del sistema) y con pulsadores físicos. Safari solo abre el teclado del sistema tras un toque, así que previsiblemente se cerrará entre actividades y habrá que volver a tocar la casilla; no se ha podido comprobar.
 
 ## Cambio 0.6.8
 
