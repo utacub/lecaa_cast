@@ -1,9 +1,9 @@
 <!doctype html>
 <html lang="es"><head><meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-wwX44kYTu5K8rw/jJBazJaKfVpaU/G5/YFMCwy5C6lQ=' 'sha256-Akg2t/UHjUfQg9UMzuKGK0AGIDJnwBwUVm4qzngtbZs='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'sha256-wq/eubNB82d2Lc5nYe3Z3ujF+5AScFdXxdPzICqJF+g=' 'sha256-Akg2t/UHjUfQg9UMzuKGK0AGIDJnwBwUVm4qzngtbZs='; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src data: blob:; font-src data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; worker-src 'self'; frame-src 'none'; manifest-src 'self'">
 <meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="lecaa-revision" content="2026-10-29-cast-0.6.10">
-<title>LECAA CAST · 0.6.10</title>
+<meta name="lecaa-revision" content="2026-11-05-cast-0.6.11">
+<title>LECAA CAST · 0.6.11</title>
 <meta name="description" content="Aplicación para practicar lectura y escritura en castellano, pensada para alumnos que utilizan CAA">
 
 
@@ -706,6 +706,11 @@ button:disabled>*{opacity:1}
  .writing-main:has(.fk-kbd) .stim-pic,.build-stage .writing-main:has(.fk-kbd) .stim-pic{width:clamp(56px,9vh,90px);height:clamp(56px,9vh,90px)}
  .writing-actions .fk-toggle{flex-direction:column;gap:5px}
  .fk-switch{width:38px;height:22px}.fk-knob{width:16px;height:16px}.fk-toggle.on .fk-knob{left:19px}}
+
+/* 0.6.11: forgotten password in the adult-zone dialog. */
+.modal .forgot{justify-self:start;min-height:44px;padding:4px 0;border:0;background:none;color:var(--accent);font:inherit;font-size:.92rem;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.modal .forgot:focus-visible{outline:3px solid var(--focus);outline-offset:3px;border-radius:6px}
+.modal .reset-sum{font-size:1.6rem;font-weight:700;letter-spacing:.02em;color:inherit}
 </style>
 </head><body><div lang="es" id="app" lang="ca"></div>
 <script>"use strict";
@@ -1496,7 +1501,8 @@ function adultGate(p, onEnter) {
     h("h2", {}, "Zona de adulto · ", p.name),
     p.example ? h("p", { class: "muted" }, "Perfil de exploración: no tiene contraseña.") : h("label", { class: "f" }, "Contraseña", pw),
     err,
-    h("div", { class: "row" }, h("button", { class: "btn", type: "submit" }, "Entra"), (() => { const b = h("button", { class: "btn ghost", type: "button" }, S && !S.ended ? "Vuelve a la sesión" : "Cancela"); b.onclick = close; return b; })()));
+    h("div", { class: "row" }, h("button", { class: "btn", type: "submit" }, "Entra"), (() => { const b = h("button", { class: "btn ghost", type: "button" }, S && !S.ended ? "Vuelve a la sesión" : "Cancela"); b.onclick = close; return b; })()),
+    p.example ? null : (() => { const b = h("button", { class: "forgot", type: "button" }, "He olvidado la contraseña"); b.onclick = () => resetPassword(p, form, enter); return b; })());
   form.addEventListener("submit", async ev => {
     ev.preventDefault();
     if (p.example || (await hashPw(pw.value)) === p.pwHash) enter();
@@ -1505,6 +1511,41 @@ function adultGate(p, onEnter) {
   if (S && !S.ended) { S.paused = true;S.pauseTrial?.(); Voice.stop(); Access.clear(); }
   ov.append(form); document.body.append(ov);
   trapDialogFocus(ov,close,p.example?form.querySelector('button[type="submit"]'):pw);
+}
+// 0.6.11: forgotten password. An adult solves a two-digit multiplication and chooses a new password.
+// It keeps learners out of the adult zone; it does not protect the data from an adult who has the device.
+function resetPassword(p, gateForm, enter) {
+  const pick = () => { let n; do n = 12 + Math.floor(Math.random() * 88); while (n % 10 === 0 || n % 11 === 0); return n; };
+  let a = pick(), b = pick();
+  const sum = h("span", { class: "reset-sum" });
+  const ans = h("input", { type: "text", inputmode: "numeric", autocomplete: "off", "aria-label": "Resultado de la multiplicación" });
+  const pw1 = h("input", { type: "password", autocomplete: "new-password" }), pw2 = h("input", { type: "password", autocomplete: "new-password" });
+  const err = h("p", { class: "note", hidden: true, "aria-live": "polite" });
+  const ask = () => { sum.textContent = a + " × " + b + " ="; };
+  const show = (text, field) => { err.textContent = text; err.hidden = false; field.focus(); };
+  const back = h("button", { class: "btn ghost", type: "button" }, "Vuelve");
+  const form = h("form", { class: "modal" },
+    h("h2", {}, "Contraseña nueva · ", p.name),
+    h("p", { class: "muted" }, "Para poner una contraseña nueva, resuelve esta multiplicación."),
+    h("label", { class: "f" }, sum, ans),
+    h("label", { class: "f" }, "Contraseña nueva", h("span", { class: "h" }, "Mínimo 4 caracteres."), pw1),
+    h("label", { class: "f" }, "Repite la contraseña", pw2),
+    err,
+    h("div", { class: "row" }, h("button", { class: "btn", type: "submit" }, "Guarda y entra"), back));
+  back.onclick = () => { form.replaceWith(gateForm); gateForm.querySelector('input[type="password"]')?.focus(); };
+  form.addEventListener("submit", async ev => {
+    ev.preventDefault();
+    if (!/^\s*\d+\s*$/.test(ans.value) || Number(ans.value) !== a * b) {
+      a = pick(); b = pick(); ask(); ans.value = "";
+      return show("El resultado no es correcto. Prueba con esta otra multiplicación.", ans);
+    }
+    if (pw1.value.length < 4) return show("La contraseña debe tener al menos 4 caracteres.", pw1);
+    if (pw1.value !== pw2.value) return show("Las contraseñas no coinciden.", pw2);
+    p.pwHash = await hashPw(pw1.value);
+    logChange(p, "Contraseña nueva con «He olvidado la contraseña»."); Store.save();
+    enter();
+  });
+  ask(); gateForm.replaceWith(form); ans.focus();
 }
 
 const TABS = [["acc", "Acceso"], ["pres", "Presentación"], ["plan", "Plan"], ["words", "Palabras e imágenes"], ["snd", "Sonidos grabados"], ["data", "Datos"], ["hist", "Historial"]];
@@ -2584,7 +2625,7 @@ function showLECAAGuide(){
 
 
 /* LECAA CAST 0.1 — closed Spanish content and separate learner records. */
-const CAST_VERSION='0.6.10',CAST_ROWS=Object.values(CAST_DATA.corpus);
+const CAST_VERSION='0.6.11',CAST_ROWS=Object.values(CAST_DATA.corpus);
 const CAST_G=n=>'K'+String(n).padStart(2,'0');
 const CAST_PHONE=g=>CAST_DATA.phones[LETTER_ORDER.indexOf(g)];
 const CAST_EXCLUDED=p=>new Set([...(p.plan.excluded||[]),guideWord(p)].filter(Boolean));
@@ -3023,7 +3064,7 @@ runChoice=it=>castTrial(it,false);runBuild=it=>castTrial(it,true);
 /* Spanish adult controls, per-word support and pending female/male recordings. */
 const castBaseIllustration=illustratedWord,castAdaptedImages=new Map();
 illustratedWord=function(word,p=S?.p||CUR){const item=ARASAAC_WORDS[word],presentation=item?.presentation;if(illustrationStyle(p)!=='arasaac'||!presentation?.required)return castBaseIllustration(word,p);if(!castAdaptedImages.has(word)){const c=presentation.crop||{x:0,y:0,width:500,height:500},masks=(presentation.masks||[]).map(m=>m.type==='polygon'?`<polygon points="${m.points}" fill="${m.fill||'#fff'}"/>`:`<rect x="${m.x}" y="${m.y}" width="${m.width}" height="${m.height}" fill="${m.fill||'#fff'}"/>`).join('');const svg=`<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="${c.x} ${c.y} ${c.width} ${c.height}" width="500" height="500"><image width="500" height="500" xlink:href="${ARASAAC_IMAGES[item.id]}"/>${masks}</svg>`;castAdaptedImages.set(word,'data:image/svg+xml;base64,'+btoa(svg));}return h('img',{src:castAdaptedImages.get(word),alt:word,draggable:'false','data-image-style':'arasaac','data-word':word,'data-arasaac-id':item.id,'data-adapted':'true'});};
-const castFooter=footer;footer=function(){const f=castFooter(),revision=f.querySelector('.app-revision');if(revision){revision.textContent='Sencillas · Detalladas · ARASAAC · LECAA CAST 0.6.10';revision.dataset.lecaaRevision='cast-0.6.10';}return f;};
+const castFooter=footer;footer=function(){const f=castFooter(),revision=f.querySelector('.app-revision');if(revision){revision.textContent='Sencillas · Detalladas · ARASAAC · LECAA CAST 0.6.11';revision.dataset.lecaaRevision='cast-0.6.11';}return f;};
 const castCredits=showCredits;showCredits=function(){castCredits();const body=[...document.querySelectorAll('.credits-modal .local-dialog-body,.credits-modal')].find(n=>n.classList.contains('local-dialog-body'))||document.querySelector('.credits-modal .local-dialog-body')||document.querySelector('.credits-modal');if(!body)return;const material=body.querySelectorAll('.credit-license').item(3)?.querySelector('p');if(material)material.textContent='Esta versión reutiliza la arquitectura, la marca, los logotipos y las animaciones de la versión en catalán de LECAA y adapta el contenido al castellano. Las locuciones son voces sintéticas generadas con ElevenLabs.';const variants=Object.entries(ARASAAC_WORDS).filter(([,x])=>x.semanticVariant),adaptations=Object.entries(ARASAAC_WORDS).filter(([,x])=>x.presentation?.required);body.append(h('section',{class:'credits-section stack'},h('h3',{},'Adaptación visual al castellano'),h('p',{},'Los pictogramas proceden del portal oficial ARASAAC. Los originales incorporados se conservan; los encuadres y las ocultaciones de texto se aplican al mostrarlos.'),h('p',{},'Adaptaciones de presentación: '+(adaptations.map(([w])=>w).join(', ')||'ninguna')+'.'),h('details',{},h('summary',{},'Variantes de escena de ARASAAC ('+variants.length+')'),h('p',{},'Estas representaciones conservan el sustantivo, pero difieren en detalles de la escena prevista. Comprueba que el alumno reconoce la denominación antes de utilizarlas.'),...variants.map(([w,x])=>h('p',{},h('b',{},w+': '),x.senseNote||x.variantNote||x.canonicalSense)))));};
 document.querySelector('.institutional-header .brand-lockup')?.append(h('span',{class:'cast-mark'},'CAST'));
 const castBrand=brand;brand=()=>{const b=castBrand();b.append(h('span',{class:'cast-mark'},'CAST'));return b;};
