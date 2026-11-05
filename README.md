@@ -55,6 +55,7 @@ Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadO
 - Al guardar se abre la zona de adulto y el historial de cambios del perfil anota «Contraseña nueva con «He olvidado la contraseña»». La contraseña anterior deja de funcionar.
 - «Vuelve» recupera el diálogo de la contraseña y Esc lo cierra. Si se llega desde una sesión, esta sigue en pausa como con el diálogo de la contraseña.
 - Es la misma solución que la edición 45.3 de LECAA en catalán.
+- En Opciones avanzadas › Datos, el aviso al cambiar la contraseña («Mínimo 4 caracteres y deben coincidir.») y el botón «Márcala como no válida» estaban en catalán; ahora están en castellano.
 
 La contraseña sirve para que el alumno no entre solo en la zona de adulto. No protege los datos frente a un adulto que tenga el dispositivo: los datos están en el navegador y no hay cuentas en línea.
 
