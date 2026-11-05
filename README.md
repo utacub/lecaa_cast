@@ -2,7 +2,7 @@
 
 Lectura y escritura en castellano para alumnos que utilizan comunicación aumentativa y alternativa (CAA).
 
-Versión **0.6.10**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
+Versión **0.6.11**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
 
 ## Uso e instalación
 
@@ -46,6 +46,20 @@ Se corrigen dos desbordamientos en tabletas: cuatro respuestas con imágenes gra
 Comprobados 495 escenarios de disposición en Chromium 153, Firefox 153 y WebKit 26.5 sobre Linux (11 tamaños × 3 tamaños de imagen × 5 actividades por motor), con palabras largas en escritura y lectura. Las 900 imágenes se descodifican en los tres motores. Se comprueban también los seis accesos con eventos de ratón y teclado en Chromium y Firefox, y las siete vistas de configuración en escritorio y tableta. La PWA actualiza desde 0.6.4 tras cerrar las ventanas, conserva los datos y la caché de otras aplicaciones y vuelve a abrir offline.
 
 Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadOS, Android y Linux. La emulación no equivale a un dispositivo real. La salida de audio, la instalación y los dispositivos de acceso físicos requieren comprobación en cada plataforma, especialmente Safari en iPadOS y macOS. No se declara validada una plataforma por cambiar el tamaño de ventana o el agente de usuario.
+
+## Cambio 0.6.11
+
+- El diálogo «Zona de adulto» tiene el enlace «He olvidado la contraseña». El perfil de exploración no lo tiene, porque no tiene contraseña. Hasta ahora la contraseña solo se podía cambiar desde dentro (Opciones avanzadas › Datos), y si se olvidaba no había forma de volver a entrar en el perfil.
+- El enlace abre el diálogo «Contraseña nueva», que pide resolver una multiplicación de dos cifras (factores de 12 a 99, sin múltiplos de 10 ni de 11). Después hay que escribir y repetir la contraseña nueva, de 4 caracteres como mínimo.
+- Si el resultado no es correcto, aparece otra multiplicación, de modo que no se puede acertar probando.
+- Al guardar se abre la zona de adulto y el historial de cambios del perfil anota «Contraseña nueva con «He olvidado la contraseña»». La contraseña anterior deja de funcionar.
+- «Vuelve» recupera el diálogo de la contraseña y Esc lo cierra. Si se llega desde una sesión, esta sigue en pausa como con el diálogo de la contraseña.
+- Es la misma solución que la edición 45.3 de LECAA en catalán.
+- En Opciones avanzadas › Datos, el aviso al cambiar la contraseña («Mínimo 4 caracteres y deben coincidir.») y el botón «Márcala como no válida» estaban en catalán; ahora están en castellano.
+
+La contraseña sirve para que el alumno no entre solo en la zona de adulto. No protege los datos frente a un adulto que tenga el dispositivo: los datos están en el navegador y no hay cuentas en línea.
+
+Comprobado en Chromium: enlace y diálogo, acceso con teclado, nueva multiplicación tras un error, contraseña demasiado corta o que no coincide, contraseña guardada y anotada en el historial, la anterior rechazada y la nueva aceptada, «Vuelve» y Esc, perfil de exploración sin enlace, y el diálogo cabe en un iPhone 14 y un iPad Mini emulados. Sin errores de JavaScript ni de CSP. Falta comprobarlo en Safari y en dispositivos reales.
 
 ## Cambio 0.6.10
 
