@@ -1,16 +1,46 @@
 'use strict';
-// Change this cache version for every deployment that changes any shell file.
+// maintenance/update-sw.py rewrites CACHE and APP_BYTES on every deployment that changes a shell file.
 const PREFIX = 'lecaa-cast-';
-const CACHE = PREFIX + '0.6.12-8537acae';
+const CACHE = PREFIX + '0.6.13-a39b82c4';
 const ROOT = '/lecaa_cast/';
-const SHELL = [ROOT, ROOT + 'manifest.webmanifest', ROOT + 'icons/icon-192.png', ROOT + 'icons/icon-512.png', ROOT + 'icons/maskable-512.png', ROOT + 'icons/apple-touch-icon.png'];
+// index.html holds the whole programme: every image, audio, video and font is embedded in it.
+const APP_BYTES = 96354493;
+const SHELL = [ROOT, ROOT + 'pwa.js', ROOT + 'manifest.webmanifest', ROOT + 'icons/icon-192.png', ROOT + 'icons/icon-512.png', ROOT + 'icons/maskable-512.png', ROOT + 'icons/apple-touch-icon.png'];
+
+async function tell(message) {
+  for (const client of await self.clients.matchAll({type:'window', includeUncontrolled:true})) client.postMessage(message);
+}
+// Download index.html while counting bytes, so the page can show a progress bar.
+async function storeApp(cache) {
+  const response = await fetch(new Request(ROOT, {cache:'reload'}));
+  if (!response.ok) throw new Error('HTTP ' + response.status);
+  // Content-Length is the compressed size when the server compresses; then the known size is the reference.
+  const length = Number(response.headers.get('content-length')) || 0;
+  const total = !response.headers.get('content-encoding') && length ? length : APP_BYTES;
+  const headers = {'Content-Type': response.headers.get('content-type') || 'text/html; charset=utf-8'};
+  if (!response.body || typeof TransformStream !== 'function') { await cache.put(ROOT, new Response(await response.blob(), {headers})); return; }
+  let done = 0, last = 0;
+  const counter = new TransformStream({
+    transform(chunk, controller) {
+      done += chunk.byteLength; controller.enqueue(chunk);
+      const now = Date.now();
+      if (now - last > 250) { last = now; tell({type:'LECAA_CAST_PROGRESS', done, total: Math.max(total, done)}); }
+    }
+  });
+  // A broken connection errors the stream, so cache.put rejects and nothing partial is kept.
+  await cache.put(ROOT, new Response(response.body.pipeThrough(counter), {headers}));
+  if (total === length && done !== length) throw new Error('Incomplete download');
+  await tell({type:'LECAA_CAST_PROGRESS', done, total: done});
+}
 self.addEventListener('install', event => {
   // Atomic precache: installation fails if any resource cannot be stored.
   // No skipWaiting: a new version must not interrupt a learner's session.
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE);
-    try { await cache.addAll(SHELL.map(url => new Request(url, {cache:'reload'}))); }
-    catch (error) { await caches.delete(CACHE); throw error; }
+    try {
+      await cache.addAll(SHELL.filter(url => url !== ROOT).map(url => new Request(url, {cache:'reload'})));
+      await storeApp(cache);
+    } catch (error) { await caches.delete(CACHE); await tell({type:'LECAA_CAST_FAILED'}); throw error; }
   })());
 });
 self.addEventListener('activate', event => {

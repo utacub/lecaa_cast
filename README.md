@@ -2,24 +2,24 @@
 
 Lectura y escritura en castellano para alumnos que utilizan comunicación aumentativa y alternativa (CAA).
 
-Versión **0.6.12**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
+Versión **0.6.13**: publicación web y PWA a partir del HTML autónomo aprobado 0.6.3. Se conservan las actividades, las mecánicas, las ilustraciones, los vídeos, las fuentes y todos los audios incorporados. Voz femenina sintética generada con ElevenLabs.
 
 ## Uso e instalación
 
 Abre https://utacub.github.io/lecaa_cast/ en un navegador actualizado. En la pantalla de inicio, el botón «Instalar» (junto a «Qué es LECAA CAST», «Guía y marco teórico» y «Créditos») abre la instalación en Chrome y Edge. En iPhone o iPad, el mismo botón explica los pasos en Safari: Compartir → Añadir a pantalla de inicio. El botón no aparece cuando LECAA CAST ya se ha abierto como aplicación instalada.
 
-La primera descarga incluye el programa completo, unos 97 MB. Espera al mensaje **«Lista para usar sin conexión: imágenes y audios incluidos»** antes de desconectarte. Las siguientes aperturas pueden funcionar sin conexión. Los navegadores pueden eliminar los datos locales si se borra su almacenamiento o falta espacio; conserva copias de seguridad de los perfiles.
+La primera descarga incluye el programa completo, unos 96 MB. Antes de instalar, el botón «Instalar» avisa de la mida, del espacio libre que indica el navegador y recomienda usar wifi. Una barra de progreso muestra los megabytes descargados, en la pantalla de inicio y en el diálogo de instalación. Espera al mensaje **«Lista para usar sin conexión: imágenes y audios incluidos»** antes de desconectarte. Las siguientes aperturas pueden funcionar sin conexión. Los navegadores pueden eliminar los datos locales si se borra su almacenamiento o falta espacio; conserva copias de seguridad de los perfiles.
 
 Los perfiles, configuraciones y sesiones se guardan en este navegador y dispositivo. Una instalación desde otro navegador no los transfiere automáticamente. No se envían los datos de los alumnos al repositorio ni a un servidor.
 
 ## Publicación y mantenimiento
 
-GitHub Pages publica la rama `main`, carpeta raíz `/`. No requiere compilación ni servicios externos. `index.html` es autónomo; `manifest.webmanifest`, `sw.js` e `icons/` añaden la instalación PWA.
+GitHub Pages publica la rama `main`, carpeta raíz `/`. No requiere compilación ni servicios externos. `index.html` es autónomo; `pwa.js`, `manifest.webmanifest`, `sw.js` e `icons/` añaden la instalación PWA.
 
 - Identidad, inicio y ámbito: `/lecaa_cast/`.
 - Cachés exclusivos con prefijo `lecaa-cast-`.
 - Datos de perfiles: `lecaa.cast.v1`; multimedia local: IndexedDB `lecaa-cast-media`.
-- Al cambiar recursos, cambia la versión de la caché de `sw.js`. Las actualizaciones esperan a que se cierren todas las ventanas de LECAA CAST; no interrumpen sesiones.
+- Al cambiar `index.html`, `pwa.js`, el manifiesto o los iconos, ejecuta `python3 maintenance/update-sw.py`: escribe el tamaño exacto de `index.html` (para la barra de progreso) y una versión de caché nueva en `sw.js`. Las actualizaciones esperan a que se cierren todas las ventanas de LECAA CAST; no interrumpen sesiones.
 - Al modificar un script incrustado, recalcula su hash SHA-256 en la política CSP de `index.html`.
 - Conserva los créditos y avisos de terceros incluidos en el programa.
 
@@ -46,6 +46,17 @@ Se corrigen dos desbordamientos en tabletas: cuatro respuestas con imágenes gra
 Comprobados 495 escenarios de disposición en Chromium 153, Firefox 153 y WebKit 26.5 sobre Linux (11 tamaños × 3 tamaños de imagen × 5 actividades por motor), con palabras largas en escritura y lectura. Las 900 imágenes se descodifican en los tres motores. Se comprueban también los seis accesos con eventos de ratón y teclado en Chromium y Firefox, y las siete vistas de configuración en escritorio y tableta. La PWA actualiza desde 0.6.4 tras cerrar las ventanas, conserva los datos y la caché de otras aplicaciones y vuelve a abrir offline.
 
 Estos resultados no certifican todos los equipos Windows, ChromeOS, macOS, iPadOS, Android y Linux. La emulación no equivale a un dispositivo real. La salida de audio, la instalación y los dispositivos de acceso físicos requieren comprobación en cada plataforma, especialmente Safari en iPadOS y macOS. No se declara validada una plataforma por cambiar el tamaño de ventana o el agente de usuario.
+
+## Cambio 0.6.13
+
+- La instalación sigue guardando todo lo necesario para funcionar sin conexión: `index.html` contiene todas las imágenes, audios, vídeos y tipos de letra (no hay ninguna petición a otros servidores; la CSP solo permite `data:` para ellos), y el service worker guarda `index.html`, `pwa.js`, el manifiesto y los iconos de forma atómica: si falta uno, no se instala nada a medias.
+- Aviso de tamaño al pulsar «Instalar»: «Ocupa unos 96 MB», qué se guarda, recomendación de usar wifi y el espacio libre que indica el navegador (con un aviso destacado si no basta). En Chrome y Edge, la instalación empieza con el botón «Instalar (unos 96 MB)» del aviso; en Safari y otros navegadores, el aviso precede a los pasos.
+- Barra de progreso de la descarga («Descargando para usar sin conexión: 23 de 96 MB (24 %)») en la pantalla de inicio y en el diálogo de instalación. Si la conexión se corta, aparece «Reintentar descarga» y no queda nada a medias.
+- Al instalar, se pide al navegador almacenamiento persistente (`navigator.storage.persist()`), para que no borre la aplicación cuando falte espacio. Cada navegador decide si lo concede.
+- El código de instalación pasa de un script dentro de `index.html` a `pwa.js`, para que los próximos cambios no obliguen a subir de nuevo los 96 MB. La CSP permite `'self'` para este script.
+- `maintenance/update-sw.py` mantiene el tamaño y la versión de la caché.
+
+Comprobado en Chromium con un servidor que comprime con gzip (como GitHub Pages) y otro sin compresión: barra de progreso de 0 a 100 %, corte de la conexión a media descarga con «Reintentar descarga» y descarga completa después, aviso de tamaño con y sin el botón de instalación del navegador, recarga sin conexión. Sin errores de JavaScript ni de CSP. Falta comprobarlo en Safari (iPad, Mac) y en dispositivos reales.
 
 ## Cambio 0.6.12
 
