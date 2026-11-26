@@ -12,6 +12,14 @@ La primera descarga incluye el programa completo, unos 96 MB. Antes de instalar,
 
 Los perfiles, configuraciones y sesiones se guardan en este navegador y dispositivo. Una instalación desde otro navegador no los transfiere automáticamente. No se envían los datos de los alumnos al repositorio ni a un servidor.
 
+## Licencia
+
+Copyright © UTAC (Unitat de Tècniques Augmentatives de Comunicació).
+
+El código de LECAA CAST es software libre: se distribuye con la licencia **GNU General Public License 3.0 o posterior** (GPL-3.0-or-later), en el archivo [`LICENSE`](LICENSE). Se puede usar, estudiar, modificar y redistribuir; las versiones modificadas que se distribuyan deben publicarse con la misma licencia y con el código fuente, y deben conservar los avisos de autoría.
+
+Los contenidos propios (ilustraciones, animaciones, locuciones, actividades y textos) tienen la licencia **Creative Commons Reconocimiento-NoComercial-CompartirIgual 4.0** (CC BY-NC-SA 4.0), en el archivo [`LICENSE-CONTINGUTS.md`](LICENSE-CONTINGUTS.md). Hay que citar «LECAA CAST, UTAC (Unitat de Tècniques Augmentatives de Comunicació)», no se permite el uso comercial y las adaptaciones deben compartirse con la misma licencia. Quedan fuera los pictogramas ARASAAC (con su propia licencia CC BY-NC-SA 4.0), las tipografías Andika y Manrope (SIL Open Font License 1.1) y los logotipos de la UTAC, de LECAA y de las instituciones.
+
 ## Publicación y mantenimiento
 
 GitHub Pages publica la rama `main`, carpeta raíz `/`. No requiere compilación ni servicios externos. `index.html` es autónomo; `pwa.js`, `manifest.webmanifest`, `sw.js` e `icons/` añaden la instalación PWA.
